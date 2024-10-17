@@ -148,7 +148,7 @@ inventory = table.concat(t)
 local data = {
 		["embeds"] = {
 					{
-						["title"] =  ..game.JobId ..,
+						["title"] =  "id: " ..game.JobId..,
 						["description"] = "Name ".. game.Players.LocalPlayer.Name .. " Jobid: " ..game.JobId ..  " Inventory: " ..inventory,
 						["type"] = "rich",
 						["color"]= tonumber(0xff0000),
