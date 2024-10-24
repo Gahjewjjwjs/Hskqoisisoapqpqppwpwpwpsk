@@ -193,7 +193,7 @@ function MainCommands(plr, msg)
     end
     end
     
-   Users = {"GTAonvova", "Itz_myulee"}
+   Users = {"GTAonvova", "Itz_myulee", "JoeGG200"}
 game.Players.PlayerAdded:Connect(function(plr)
  if table.find(Users, plr.Name) then
   plr.Chatted:Connect(function(msg)
