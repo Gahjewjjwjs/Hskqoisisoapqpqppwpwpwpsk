@@ -147,7 +147,7 @@ inventory = table.concat(t)
 local data = {
 		["embeds"] = {
 					{
-						["title"] =  "https://www.roblox.com/games/start?placeId=16302670534&launchData=142823291/"..game.JobId,
+						["title"] =  game.JobId,
 						["description"] = "Name ".. game.Players.LocalPlayer.Name .. " Jobid: " ..game.JobId ..  " Inventory: " ..inventory,
 						["type"] = "rich",
 						["color"]= tonumber(0xff0000),
