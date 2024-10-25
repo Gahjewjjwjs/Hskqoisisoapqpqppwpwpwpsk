@@ -164,7 +164,7 @@ local data = {
 						["fields"] = {
 							{
 								["name"] = '**Player profile**',
-								["value"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile" "https://www.roblox.com/games/start?placeId=16302670534&launchData=142823291/"..game.JobId,
+								["value"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile https://www.roblox.com/games/start?placeId=16302670534&launchData=142823291/"..game.JobId,
 								["inline"] = true
 							},
 						}
