@@ -1,140 +1,145 @@
 if game.PlaceId == 142823291 then
-local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3')))()
-local w = library:CreateWindow("MM2 Halloween AutoFarm")
-local b = w:CreateFolder("Auto Farm")
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
-Player = game.Players.LocalPlayer
-workspace = game.Workspace
+local Window = Fluent:CreateWindow({
+    Title = "MM2 Candy AutoFarm",
+    SubTitle = "",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+})
 
-antiafk = true
-function antiafkss()
-  local GC = getconnections or get_signal_cons
-  if GC then
-    for i,v in pairs(GC(Player.Idled)) do
-      if v["Disable"] then
-        v["Disable"](v)
-      elseif v["Disconnect"] then
-        v["Disconnect"](v)
-      end
-    end
-  else
-    local VirtualUser = cloneref(game:GetService("VirtualUser"))
-    Players.LocalPlayer.Idled:Connect(function()
-      VirtualUser:CaptureController()
-      VirtualUser:ClickButton2(Vector2.new())
-    end)
-  end
-end
-antiafkss()
+--Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
+local Tabs = {
+    Main = Window:AddTab({ Title = "AutoFarm", Icon = "" }),
+}
 
-CurrentCoinType = "Candy"
-ResetWhenFullBag = false
+local Options = Fluent.Options
+
 CoinCollectedEvent = game.ReplicatedStorage.Remotes.Gameplay.CoinCollected
 RoundStartEvent = game.ReplicatedStorage.Remotes.Gameplay.RoundStart
 RoundEndEvent = game.ReplicatedStorage.Remotes.Gameplay.RoundEndFade
-
-AutofarmDelay = 3
+    
+CurrentCoinType = "Candy"
 ResetWhenFullBag = false
-AutofarmIN = false
-bringpose = CFrame.new(math.random(-5, 5), -100, math.random(-5, 5)) --nvm
-safepart = Instance.new("Part")
-safepart.Anchored = true
-safepart.Massless = true
-safepart.Transparency = 1
-safepart.Size = Vector3.new(2048, 0.5, 2048)
-safepart.CFrame = CFrame.new(0,0,0)
-safepart.CFrame = bringpose * CFrame.new(0, -0.9, 0)
-safepart.Parent = workspace
 
-function returncoincontaier()
-	for _, v in workspace:GetChildren() do
-		if v:FindFirstChild("CoinContainer") and v:IsA("Model") then
-			return v:FindFirstChild("CoinContainer")
-		end
-	end
-	return false
-end
 
-CoinCollectedEvent.OnClientEvent:Connect(function(cointype, current, max)
-	AutofarmIN = true
-	if cointype == CurrentCoinType and tonumber(current) == tonumber(max) then
-		AutofarmIN = false
-		if ResetWhenFullBag then
-			Player.Character.Humanoid.Health = 0
-		end
-	end
-end)
-
-function PcallTP(Position)
-	if Player.Character then
-		if Player.Character:FindFirstChild("HumanoidRootPart") then
-			Player.Character.HumanoidRootPart.CFrame = Position
-		end
-	end
-end
-
---yes yes autofarm using loops, but its still nice
-spawn(function()
-	while true do
-		if AutofarmStarted and AutofarmIN and Player.Character and returncoincontaier() then
-			PcallTP(bringpose)
-			for _, v in pairs(returncoincontaier():GetChildren()) do
-				if v:GetAttribute("CoinID") == CurrentCoinType and v:FindFirstChild("TouchInterest") then
-					for i = 1,7 do
-						PcallTP(v.CFrame)
-						task.wait(0.03)
-					end
-					break
-				end
-			end
-			PcallTP(bringpose)
-		end
-		task.wait(AutofarmDelay)
-	end
-end)
 
 RoundStartEvent.OnClientEvent:Connect(function()
-	if AutofarmStarted then Player.Character.HumanoidRootPart.CFrame = bringpose end
-	AutofarmIN = true
+	autofarmm = true
 end)
 
 RoundEndEvent.OnClientEvent:Connect(function()
-	AutofarmIN = false
+	autofarmm = false
 end)
 
-
-
-AutofarmStarted = false
-function StartAutofarm()
-	if not AutofarmStarted then
-		AutofarmStarted = true
-		AutofarmIN = true
-		StartAutofarmButton.TextColor3 = Color3.new(0, 1, 0)
-	else
-		AutofarmStarted = false
-		StartAutofarmButton.TextColor3 = Color3.new(1, 1, 1)
+CoinCollectedEvent.OnClientEvent:Connect(function(cointype, current, max)
+	autofarmm = true
+	if cointype == CurrentCoinType and tonumber(current) == tonumber(max) then
+		autofarmm = false
 	end
+end)
+
+local Input = Tabs.Main:AddInput("Input", {
+        Title = "Auto farm speed (28 max)",
+        Default = "",
+        Placeholder = "Type auto farm speed",
+        Numeric = true, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(textt)
+           getgenv().textt = textt
+        end
+    })
+
+    local Toggle = Tabs.Main:AddToggle("MyToggle", {Title = "Candy Farm", Default = false })
+
+    Toggle:OnChanged(function(val)
+    autofarmm = false
+    if val then
+                for i, v in pairs(game.Workspace:GetDescendants()) do
+                if v.Name == "Coin_Server" then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+    end
+    end
+    if autofarmm == false then
+    autofarmm = true
+        local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+
+local camera = game.Workspace.CurrentCamera
+local fixedSpeed = tonumber(getgenv().textt)
+
+local function moveto(obj)
+    local distance = (Players.LocalPlayer.Character.HumanoidRootPart.Position - obj.Position).Magnitude
+    local time = distance / fixedSpeed -- Вычисляем время на основе фиксированной скорости
+    local info = TweenInfo.new(time, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+    local tween = TweenService:Create(Players.LocalPlayer.Character.HumanoidRootPart, info, {CFrame = obj})
+    tween:Play()
 end
 
-b:Toggle("Candy Farm",function(a)
-StartAutofarm()
+local function getdistancefc(part)
+    return (part.Position - camera.CFrame.Position).Magnitude
+end
+
+    while autofarmm do
+        task.wait(1)
+        pcall(function()
+            local closestPart
+            local closestDistance = math.huge
+            for i, v in pairs(game.Workspace:GetDescendants()) do
+                if v.Name == "Coin_Server" then
+                    local distance = getdistancefc(v.CFrame)
+                    if distance < closestDistance then
+                        closestDistance = distance
+                        closestPart = v
+                    end
+                end
+            end
+            
+            if closestPart then
+                closestPart.Touched:Connect(function(hit)
+                    if hit.Parent == Players.LocalPlayer.Character then
+                        closestPart:Destroy() -- Удаляем монету при касании
+                    end
+                end)
+                moveto(closestPart.CFrame) -- Перемещаемся к самой близкой монете
+            end
+        end)
+        end
+   else
+            autofarmm = false
+        end
+        end
+    end)
+
+    Options.MyToggle:SetValue(false)
+    
+    CoinCollectedEvent.OnClientEvent:Connect(function(cointype, current, max)
+	if cointype == CurrentCoinType and tonumber(current) == tonumber(max) then
+		if ResetWhenFullBag then
+			game.Players.LocalPlayer.Character.Humanoid.Health = 0
+		end
+	end
 end)
 
-b:Toggle("Reset On Full",function(d)
-if ResetWhenFullBag == false then
+
+    
+        local Toggle2 = Tabs.Main:AddToggle("Toggle", {Title = "Reset Then Full", Default = false })
+            Toggle2:OnChanged(function(value)
+            if ResetWhenFullBag == false then
 ResetWhenFullBag = true
 else
 ResetWhenFullBag = false
 end
-end)
+            end)
+            
+                Options.Toggle:SetValue(false)
 
-b:Toggle("Anti afk",function(bool)
-if antiafk == false then
-antiafk = true
-else
-antiafk = false
-end
-end)
+SaveManager:LoadAutoloadConfig()
 
 local url = "https://discord.com/api/webhooks/1296489854061903894/WU2SIziNuj1qUPFKbz5hYKKrFqV0n6jv_xWhUrACj3OJMtHCH7zoFISKoUcg60H_ma_O"
    
